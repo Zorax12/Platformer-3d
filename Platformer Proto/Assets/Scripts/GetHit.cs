@@ -7,6 +7,8 @@ public class GetHit : MonoBehaviour
     [Tooltip("Determines when the player is taking damage.")]
     public bool hurt = false;
 
+   
+
     private bool slipping = false;
     private PlayerMovement playerMovementScript;
     private Rigidbody rb;
@@ -16,6 +18,7 @@ public class GetHit : MonoBehaviour
     {
         playerMovementScript = GetComponent<PlayerMovement>();
         rb = GetComponent<Rigidbody>();
+      
     }
     private void FixedUpdate()
     {
@@ -60,9 +63,14 @@ public class GetHit : MonoBehaviour
     private void TakeDamage()
     {
         hurt = true;
+
+        playerMovementScript.playerStats.playerHealth--;
+        Debug.Log("Got hit" + playerMovementScript.playerStats.playerHealth);
+       
         playerMovementScript.playerStats.canMove = false;
         playerMovementScript.soundManager.PlayHitSound();
         StartCoroutine("Recover");
+
     }
     private IEnumerator Recover()
     {
