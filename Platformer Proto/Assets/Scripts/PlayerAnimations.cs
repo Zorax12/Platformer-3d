@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class PlayerAnimations : MonoBehaviour
+public class PlayerAnimations : NetworkBehaviour
 {
     private Animator anim;
     private PlayerMovement playerMovementScript;
@@ -19,6 +20,8 @@ public class PlayerAnimations : MonoBehaviour
 
     private void Update()
     {
+        if (!IsOwner)
+            return;
         // Plays the running animation when holding down the move keys.
         if (Input.GetButton("Horizontal") || Input.GetButton("Vertical"))
         {
@@ -45,7 +48,7 @@ public class PlayerAnimations : MonoBehaviour
         Debug.DrawLine(new Vector3(playerMovementScript.groundCheckL.position.x, transform.position.y + 1, transform.position.z), playerMovementScript.groundCheckL.position, Color.red);
         Debug.DrawLine(new Vector3(playerMovementScript.groundCheckR.position.x, transform.position.y + 1, transform.position.z), playerMovementScript.groundCheckR.position, Color.red);
         Debug.DrawLine(new Vector3(transform.position.x, transform.position.y + 1, transform.position.z), stompEnemiesScript.stompCheck.position, Color.red);
-        if (hitL || hitL)
+        if (hitL || hitL && IsOwner)
         {
             anim.SetBool("Grounded", true);
             anim.SetTrigger("Landed");
